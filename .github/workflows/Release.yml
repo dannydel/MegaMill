@@ -38,10 +38,10 @@ jobs:
           count=$(git rev-list --count HEAD)
           echo "versioncode=$count" >> $GITHUB_OUTPUT
 
-build:
-  needs: [ bump-version, test-service ]
-  runs-on: ubuntu-latest
-  steps:
+  build:
+    needs: [ bump-version ]
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:

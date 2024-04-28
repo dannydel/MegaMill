@@ -38,31 +38,31 @@ jobs:
           count=$(git rev-list --count HEAD)
           echo "versioncode=$count" >> $GITHUB_OUTPUT
 
-    build:
-      needs: [ bump-version, test-service ]
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - uses: actions/cache@v3
-          with:
-            path: ${{ github.workspace }}/.nuget/packages
-            key: ${{ runner.os }}-nuget-service-${{ hashFiles('**/*.csproj') }}
-            restore-keys: |
+build:
+  needs: [ bump-version, test-service ]
+  runs-on: ubuntu-latest
+  steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/.nuget/packages
+          key: ${{ runner.os }}-nuget-service-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
               ${{ runner.os }}-nuget-
-        - name: Setup .NET
-          uses: actions/setup-dotnet@v3
-          with:
-            dotnet-version: ${{ env.DOTNET_VERSION }}
-        - name: Setup Local Nuget
-          run: |
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Setup Local Nuget
+        run: |
             rm nuget.config
             mv nuget-local.config nuget.config
-        - name: Restore dependencies
-          run: |
+      - name: Restore dependencies
+        run: |
             dotnet restore
             dotnet tool restore
-          working-directory: MegaMill
-        - name: Publish service
-          run: |
+        working-directory: MegaMill
+      - name: Publish service
+        run: |
             dotnet build -c Release /p:Version=${{ needs.bump-version.outputs.version }}
             dotnet publish -c Release -o ${{ github.workspace }}/out /p:Version=${{ needs.bump-version.outputs.version }}

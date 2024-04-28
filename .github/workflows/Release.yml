@@ -62,7 +62,7 @@ jobs:
             dotnet restore
             dotnet tool restore
           working-directory: MegaMill
-           - name: Publish service
+        - name: Publish service
           run: |
             dotnet build -c Release /p:Version=${{ needs.bump-version.outputs.version }}
             dotnet publish -c Release -o ${{ github.workspace }}/out /p:Version=${{ needs.bump-version.outputs.version }}

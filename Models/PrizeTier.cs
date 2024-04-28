@@ -5,7 +5,7 @@ namespace MegaMill.Models{
 
     public class PrizeTier
     {
-        public DateTime PlayDate { get; set; }
+        public DateTime? PlayDate { get; set; }
         public int Tier { get; set; }
         public bool IsMegaplier { get; set; }
         public int Winners { get; set; }
